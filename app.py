@@ -1,18 +1,53 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-st.title("Maize Price Prediction")
+# Page configuration
+st.set_page_config(
+    page_title="Maize Price Forecast System",
+    page_icon="🌽",
+    layout="wide"
+)
 
-st.write("Enter the values below to predict maize price")
+# Main title
+st.title("🌽 Maize Price Forecast System")
 
-rainfall = st.number_input("Rainfall (mm)")
-supply = st.number_input("Supply volume")
-season = st.selectbox("Season", ["Planting", "Growing", "Harvest"])
+st.write(
+"""
+Welcome to the **Maize Price Forecast System**.
 
-if st.button("Predict Price"):
-    
-    # Example simple formula (we will replace with your real model later)
-    price = 20 + (0.02 * rainfall) - (0.01 * supply)
-    
-    st.success(f"Predicted maize price: {price:.2f} KSh/kg")
+This application helps farmers predict maize prices in **Nairobi and Kitui markets**.
+"""
+)
+
+st.markdown("## How Farmers Can Use This System")
+
+st.markdown("""
+1️⃣ **Register as a farmer**
+
+2️⃣ **Select your market**
+
+3️⃣ **Choose prediction duration**
+
+4️⃣ **View predicted maize prices**
+
+5️⃣ **Explore price trends**
+""")
+
+st.info("Use the **sidebar** to navigate through the pages of the system.")
+
+st.markdown("---")
+
+st.subheader("Why This System Is Useful")
+
+st.write(
+"""
+Farmers often sell their crops without knowing future market prices.
+
+This system helps farmers:
+
+- Predict maize prices
+- Identify good markets
+- Understand price trends
+"""
+)
+
+st.success("Navigate using the sidebar on the left.")
