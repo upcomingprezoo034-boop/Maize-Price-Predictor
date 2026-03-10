@@ -7,7 +7,7 @@ st.title("Maize Wholesale Price Prediction")
 st.write("Enter seasonal conditions to estimate maize prices.")
 
 # Load trained model
-model = pickle.load(open("price_prediction_model.pkl","rb"))
+model = pickle.load(open("Untitled2.ipynb","rb"))
 
 # Farmer inputs
 rainfall = st.number_input(
