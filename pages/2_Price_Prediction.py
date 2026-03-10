@@ -2,67 +2,48 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-st.title("Maize Price Predictor")
+st.title("Maize Wholesale Price Prediction")
 
-# Load dataset safely
-@st.cache_data
-def load_data():
-    return pd.read_excel("maize_dataset.xlsx")
+st.write("Enter seasonal conditions to estimate maize prices.")
 
-data = load_data()
+# Load trained model
+model = pickle.load(open("price_prediction_model.pkl","rb"))
 
-# Load trained model safely
-@st.cache_resource
-def load_model():
-    with open("price_prediction_model.pkl","rb") as f:
-        return pickle.load(f)
+# Farmer inputs
+rainfall = st.number_input(
+"Expected Rainfall (mm)",
+min_value=0.0,
+max_value=500.0,
+value=100.0
+)
 
-model = load_model()
-
-st.write("Select your market and prediction period")
-
-# Real markets from dataset
-markets = sorted(data["Market"].dropna().unique())
-
-market = st.selectbox("Choose Market", markets)
-
-timeline = st.selectbox(
-"Prediction Duration",
+season = st.selectbox(
+"Season",
 [
-"1 Week",
-"1 Month",
-"3 Months"
+"Planting",
+"Growing",
+"Harvest",
 ]
 )
 
-# Convert duration to number
-timeline_map = {
-"1 Week":1,
-"1 Month":4,
-"3 Months":12
+# Convert season to numeric
+season_map = {
+"Planting":1,
+"Growing":2,
+"Harvest":3,
 }
 
-duration_value = timeline_map[timeline]
+season_value = season_map[season]
 
-if st.button("Predict Price"):
+if st.button("Predict Wholesale Price"):
 
-    try:
+    input_data = pd.DataFrame({
+        "Rainfall":[rainfall],
+        "Season":[season_value]
+    })
 
-        # Example input structure
-        input_df = pd.DataFrame({
-            "Market":[market],
-            "Duration":[duration_value]
-        })
+    prediction = model.predict(input_data)
 
-        # Convert categorical variables
-        input_df = pd.get_dummies(input_df)
-
-        prediction = model.predict(input_df)
-
-        st.success(
-            f"Predicted maize price in {market} after {timeline} is KSh {round(prediction[0],2)} per bag."
-        )
-
-    except Exception as e:
-        st.error("Prediction failed. Model input format may not match training data.")
-        st.write(e)
+    st.success(
+        f"Predicted wholesale maize price is KSh {round(prediction[0],2)} per bag."
+    )
